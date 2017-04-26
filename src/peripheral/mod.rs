@@ -424,6 +424,13 @@ pub struct Scb {
     pub cpacr: RW<u32>,
 }
 
+impl Scb {
+    /// Set systic priority
+    pub unsafe fn set_syst_priority(&self, prio: u8) {
+        self.shpr[11].write(prio);
+    }
+}
+
 /// SysTick register block
 #[repr(C)]
 pub struct Syst {
