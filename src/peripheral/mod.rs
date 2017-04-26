@@ -437,6 +437,33 @@ pub struct Syst {
     pub calib: RO<u32>,
 }
 
+/// Maximum value of the Systic counter
+pub const SYSTICK_MAX: u32 = (1 << 24) - 1; // 24 bit counter
+
+impl Syst {
+    /// Set reload value, 24 bits unchecked!!!
+    pub unsafe fn set_reload(&self, v: u32) {
+        self.rvr.write(v); // write reload value (24 bits non checked)
+        self.cvr.write(0x0); // force counter reload
+    }
+
+    /// Enable systic interrupt, perhaps need additional masking
+    pub unsafe fn enable(&self) {
+        // csr register
+        // bit
+        // 2    CLOCKSOURCE (1 external enable)
+        // 1    TICKINT     (1 interrupt enbale)
+        // 0    ENABLE      (1 enable counter)
+        self.csr.write((1 << 2) | (1 << 1) | (1 << 0));
+    }
+
+    /// Enable systic interrupt, perhaps need additional masking
+    pub unsafe fn disable(&self) {
+        self.csr.write(0);
+    }
+}
+
+
 /// TPIU register block
 #[repr(C)]
 pub struct Tpiu {
