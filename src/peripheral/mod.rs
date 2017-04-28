@@ -445,6 +445,7 @@ pub struct Syst {
 }
 
 /// Maximum value of the Systic counter
+
 pub const SYSTICK_MAX: u32 = (1 << 24) - 1; // 24 bit counter
 
 impl Syst {
