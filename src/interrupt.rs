@@ -61,18 +61,25 @@ pub fn free<F, R>(f: F) -> R
 where
     F: FnOnce(&CriticalSection) -> R,
 {
-    let primask = ::register::primask::read();
+    #[cfg(not(feature = "klee_analysis"))]
+    {
+        let primask = ::register::primask::read();
 
-    // disable interrupts
-    disable();
+        // disable interrupts
+        disable();
 
-    let r = f(unsafe { &CriticalSection::new() });
+        let r = f(unsafe { &CriticalSection::new() });
 
-    // If the interrupts were active before our `disable` call, then re-enable
-    // them. Otherwise, keep them disabled
-    if primask.is_active() {
-        unsafe { enable() }
+        // If the interrupts were active before our `disable` call, then re-enable
+        // them. Otherwise, keep them disabled
+        if primask.is_active() {
+            unsafe { enable() }
+        }
+
+        r
     }
-
-    r
+    #[cfg(feature = "klee_analysis")]
+    {
+        f(unsafe { &CriticalSection::new() })
+    }
 }

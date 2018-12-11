@@ -116,7 +116,9 @@ impl NVIC {
         #[cfg(armv6m)]
         {
             // NOTE(unsafe) atomic read with no side effects
-            let ipr_n = unsafe { (*Self::ptr()).ipr[Self::ipr_index(&interrupt)].read() };
+            let ipr_n = unsafe {
+                (*Self::ptr()).ipr[Self::ipr_index(&interrupt)].read()
+            };
             let prio = (ipr_n >> Self::ipr_shift(&interrupt)) & 0x000000ff;
             prio as u8
         }
@@ -132,7 +134,9 @@ impl NVIC {
         let mask = 1 << (nr % 32);
 
         // NOTE(unsafe) atomic read with no side effects
-        unsafe { ((*Self::ptr()).iabr[usize::from(nr / 32)].read() & mask) == mask }
+        unsafe {
+            ((*Self::ptr()).iabr[usize::from(nr / 32)].read() & mask) == mask
+        }
     }
 
     /// Checks if `interrupt` is enabled
@@ -144,7 +148,9 @@ impl NVIC {
         let mask = 1 << (nr % 32);
 
         // NOTE(unsafe) atomic read with no side effects
-        unsafe { ((*Self::ptr()).iser[usize::from(nr / 32)].read() & mask) == mask }
+        unsafe {
+            ((*Self::ptr()).iser[usize::from(nr / 32)].read() & mask) == mask
+        }
     }
 
     /// Checks if `interrupt` is pending
@@ -156,7 +162,9 @@ impl NVIC {
         let mask = 1 << (nr % 32);
 
         // NOTE(unsafe) atomic read with no side effects
-        unsafe { ((*Self::ptr()).ispr[usize::from(nr / 32)].read() & mask) == mask }
+        unsafe {
+            ((*Self::ptr()).ispr[usize::from(nr / 32)].read() & mask) == mask
+        }
     }
 
     /// Forces `interrupt` into pending state
@@ -167,7 +175,9 @@ impl NVIC {
         let nr = interrupt.nr();
 
         // NOTE(unsafe) atomic stateless write; ICPR doesn't store any state
-        unsafe { (*Self::ptr()).ispr[usize::from(nr / 32)].write(1 << (nr % 32)) }
+        unsafe {
+            (*Self::ptr()).ispr[usize::from(nr / 32)].write(1 << (nr % 32))
+        }
     }
 
     /// Forces `interrupt` into pending state
@@ -220,7 +230,9 @@ impl NVIC {
         let nr = interrupt.nr();
 
         // NOTE(unsafe) atomic stateless write; ICPR doesn't store any state
-        unsafe { (*Self::ptr()).icpr[usize::from(nr / 32)].write(1 << (nr % 32)) }
+        unsafe {
+            (*Self::ptr()).icpr[usize::from(nr / 32)].write(1 << (nr % 32))
+        }
     }
 
     #[cfg(armv6m)]

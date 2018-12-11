@@ -78,8 +78,10 @@ impl CBP {
         // CMSIS-Core implementation and use fixed values.
         unsafe {
             self.dcisw.write(
-                (((way as u32) & (CBP_SW_WAY_MASK >> CBP_SW_WAY_POS)) << CBP_SW_WAY_POS)
-                    | (((set as u32) & (CBP_SW_SET_MASK >> CBP_SW_SET_POS)) << CBP_SW_SET_POS),
+                (((way as u32) & (CBP_SW_WAY_MASK >> CBP_SW_WAY_POS))
+                    << CBP_SW_WAY_POS)
+                    | (((set as u32) & (CBP_SW_SET_MASK >> CBP_SW_SET_POS))
+                        << CBP_SW_SET_POS),
             );
         }
     }
@@ -108,8 +110,10 @@ impl CBP {
         // See comment for dcisw() about the format here
         unsafe {
             self.dccsw.write(
-                (((way as u32) & (CBP_SW_WAY_MASK >> CBP_SW_WAY_POS)) << CBP_SW_WAY_POS)
-                    | (((set as u32) & (CBP_SW_SET_MASK >> CBP_SW_SET_POS)) << CBP_SW_SET_POS),
+                (((way as u32) & (CBP_SW_WAY_MASK >> CBP_SW_WAY_POS))
+                    << CBP_SW_WAY_POS)
+                    | (((set as u32) & (CBP_SW_SET_MASK >> CBP_SW_SET_POS))
+                        << CBP_SW_SET_POS),
             );
         }
     }
@@ -130,8 +134,10 @@ impl CBP {
         // See comment for dcisw() about the format here
         unsafe {
             self.dccisw.write(
-                (((way as u32) & (CBP_SW_WAY_MASK >> CBP_SW_WAY_POS)) << CBP_SW_WAY_POS)
-                    | (((set as u32) & (CBP_SW_SET_MASK >> CBP_SW_SET_POS)) << CBP_SW_SET_POS),
+                (((way as u32) & (CBP_SW_WAY_MASK >> CBP_SW_WAY_POS))
+                    << CBP_SW_WAY_POS)
+                    | (((set as u32) & (CBP_SW_SET_MASK >> CBP_SW_SET_POS))
+                        << CBP_SW_SET_POS),
             );
         }
     }

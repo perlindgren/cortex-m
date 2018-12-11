@@ -96,18 +96,24 @@ impl CPUID {
     }
 
     /// Returns the number of sets and ways in the selected cache
-    pub fn cache_num_sets_ways(&mut self, level: u8, ind: CsselrCacheType) -> (u16, u16) {
+    pub fn cache_num_sets_ways(
+        &mut self,
+        level: u8,
+        ind: CsselrCacheType,
+    ) -> (u16, u16) {
         const CCSIDR_NUMSETS_POS: u32 = 13;
         const CCSIDR_NUMSETS_MASK: u32 = 0x7FFF << CCSIDR_NUMSETS_POS;
         const CCSIDR_ASSOCIATIVITY_POS: u32 = 3;
-        const CCSIDR_ASSOCIATIVITY_MASK: u32 = 0x3FF << CCSIDR_ASSOCIATIVITY_POS;
+        const CCSIDR_ASSOCIATIVITY_MASK: u32 =
+            0x3FF << CCSIDR_ASSOCIATIVITY_POS;
 
         self.select_cache(level, ind);
         ::asm::dsb();
         let ccsidr = self.ccsidr.read();
         (
             (1 + ((ccsidr & CCSIDR_NUMSETS_MASK) >> CCSIDR_NUMSETS_POS)) as u16,
-            (1 + ((ccsidr & CCSIDR_ASSOCIATIVITY_MASK) >> CCSIDR_ASSOCIATIVITY_POS)) as u16,
+            (1 + ((ccsidr & CCSIDR_ASSOCIATIVITY_MASK)
+                >> CCSIDR_ASSOCIATIVITY_POS)) as u16,
         )
     }
 }

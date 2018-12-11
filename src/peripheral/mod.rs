@@ -77,7 +77,6 @@
 
 // TODO stand-alone registers: ICTR, ACTLR and STIR
 
-
 use core::marker::PhantomData;
 use core::ops;
 
@@ -212,6 +211,13 @@ impl Peripherals {
     }
 }
 
+#[cfg(feature = "klee_analysis")]
+mod klee_statics {
+    use UntaggedOption; // should move to core::mem::MaybeUninit
+    pub static mut DWT: UntaggedOption<::peripheral::dwt::RegisterBlock> =
+        UntaggedOption::<::peripheral::dwt::RegisterBlock> { none: () };
+
+}
 /// Cache and branch predictor maintenance operations
 pub struct CBP {
     _marker: PhantomData<*const ()>,
@@ -250,7 +256,7 @@ pub struct CPUID {
 unsafe impl Send for CPUID {}
 
 impl CPUID {
-    /// Returns a pointer to the register block
+    /// Returns a pointer to the physical register block
     pub fn ptr() -> *const self::cpuid::RegisterBlock {
         0xE000_ED00 as *const _
     }
@@ -294,9 +300,16 @@ pub struct DWT {
 unsafe impl Send for DWT {}
 
 impl DWT {
-    /// Returns a pointer to the register block
+    #[cfg(not(feature = "klee_analysis"))]
+    /// Returns a pointer to the physical register block
     pub fn ptr() -> *const dwt::RegisterBlock {
         0xE000_1000 as *const _
+    }
+
+    #[cfg(feature = "klee_analysis")]
+    pub fn ptr() -> *const self::dwt::RegisterBlock {
+        ksymbol!(&mut klee_statics::DWT.some, "DWT");
+        unsafe { &klee_statics::DWT.some as *const _ }
     }
 }
 

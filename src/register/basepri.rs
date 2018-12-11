@@ -37,7 +37,9 @@ pub unsafe fn write(_basepri: u8) {
         #[cfg(all(cortex_m, feature = "inline-asm"))]
         () => match () {
             #[cfg(not(feature = "cm7-r0p1"))]
-            () => asm!("msr BASEPRI, $0" :: "r"(_basepri) : "memory" : "volatile"),
+            () => {
+                asm!("msr BASEPRI, $0" :: "r"(_basepri) : "memory" : "volatile")
+            }
             #[cfg(feature = "cm7-r0p1")]
             () => ::interrupt::free(
                 |_| asm!("msr BASEPRI, $0" :: "r"(_basepri) : "memory" : "volatile"),

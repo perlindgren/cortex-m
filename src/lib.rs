@@ -31,12 +31,15 @@
 //! This feature requires a nightly toolchain.
 
 #![cfg_attr(feature = "inline-asm", feature(asm))]
-#![deny(missing_docs)]
+// #![deny(missing_docs)]
 #![no_std]
+#![feature(untagged_unions)]
 
 extern crate aligned;
 extern crate bare_metal;
 extern crate volatile_register;
+#[macro_use]
+extern crate klee;
 
 #[macro_use]
 mod macros;
@@ -49,3 +52,8 @@ pub mod peripheral;
 pub mod register;
 
 pub use peripheral::Peripherals;
+
+pub union UntaggedOption<T> {
+    pub some: T,
+    pub none: (),
+}
