@@ -61,7 +61,7 @@ pub fn free<F, R>(f: F) -> R
 where
     F: FnOnce(&CriticalSection) -> R,
 {
-    #[cfg(not(feature = "klee_analysis"))]
+    #[cfg(not(feature = "klee-analysis"))]
     {
         let primask = ::register::primask::read();
 
@@ -78,7 +78,7 @@ where
 
         r
     }
-    #[cfg(feature = "klee_analysis")]
+    #[cfg(feature = "klee-analysis")]
     {
         f(unsafe { &CriticalSection::new() })
     }

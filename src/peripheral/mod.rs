@@ -211,7 +211,7 @@ impl Peripherals {
     }
 }
 
-#[cfg(feature = "klee_analysis")]
+#[cfg(any(feature = "klee-analysis", feature = "klee-debug"))]
 mod klee_statics {
     use UntaggedOption; // should move to core::mem::MaybeUninit
     pub static mut DWT: UntaggedOption<::peripheral::dwt::RegisterBlock> =
@@ -300,14 +300,15 @@ pub struct DWT {
 unsafe impl Send for DWT {}
 
 impl DWT {
-    #[cfg(not(feature = "klee_analysis"))]
+    #[cfg(not(any(feature = "klee-analysis", feature = "klee-debug")))]
     /// Returns a pointer to the physical register block
     pub fn ptr() -> *const dwt::RegisterBlock {
         0xE000_1000 as *const _
     }
 
-    #[cfg(feature = "klee_analysis")]
+    #[cfg(any(feature = "klee-analysis", feature = "klee-debug"))]
     pub fn ptr() -> *const self::dwt::RegisterBlock {
+        #[cfg(feature = "klee-analysis")]
         ksymbol!(&mut klee_statics::DWT.some, "DWT");
         unsafe { &klee_statics::DWT.some as *const _ }
     }
