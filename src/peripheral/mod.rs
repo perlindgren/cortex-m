@@ -213,15 +213,21 @@ impl Peripherals {
 
 #[cfg(any(feature = "klee-analysis", feature = "klee-debug"))]
 mod klee_statics {
-    use UntaggedOption; // should move to core::mem::MaybeUninit
+    use core::mem::MaybeUninit;
+    //use UntaggedOption; // should move to core::mem::MaybeUninit
 
     // DWT
-    pub static mut DWT: UntaggedOption<::peripheral::dwt::RegisterBlock> =
-        UntaggedOption::<::peripheral::dwt::RegisterBlock> { none: () };
+    // pub static mut DWT: UntaggedOption<::peripheral::dwt::RegisterBlock> =
+    //     UntaggedOption::<::peripheral::dwt::RegisterBlock> { none: () };
+
+    pub static mut DWT: MaybeUninit<::peripheral::dwt::RegisterBlock> =
+        MaybeUninit::uninitialized();
 
     // SYST
-    pub static mut SYST: UntaggedOption<::peripheral::syst::RegisterBlock> =
-        UntaggedOption::<::peripheral::syst::RegisterBlock> { none: () };
+    // pub static mut SYST: UntaggedOption<::peripheral::syst::RegisterBlock> =
+    //     UntaggedOption::<::peripheral::syst::RegisterBlock> { none: () };
+    pub static mut SYST: MaybeUninit<::peripheral::syst::RegisterBlock> =
+        MaybeUninit::uninitialized();
 
 }
 /// Cache and branch predictor maintenance operations
@@ -315,8 +321,8 @@ impl DWT {
     #[cfg(any(feature = "klee-analysis", feature = "klee-debug"))]
     pub fn ptr() -> *const self::dwt::RegisterBlock {
         #[cfg(feature = "klee-analysis")]
-        ksymbol!(&mut klee_statics::DWT.some, "DWT");
-        unsafe { &klee_statics::DWT.some as *const _ }
+        ksymbol!(&mut klee_statics::DWT.get_ref(), "DWT");
+        unsafe { klee_statics::DWT.get_ref() as *const _ }
     }
 }
 
@@ -490,8 +496,8 @@ impl SYST {
     #[cfg(any(feature = "klee-analysis", feature = "klee-debug"))]
     pub fn ptr() -> *const self::syst::RegisterBlock {
         #[cfg(feature = "klee-analysis")]
-        ksymbol!(&mut klee_statics::SYST.some, "SYST");
-        unsafe { &klee_statics::SYST.some as *const _ }
+        ksymbol!(klee_statics::SYST.get_mut(), "SYST");
+        unsafe { klee_statics::SYST.get_ref() as *const _ }
     }
 }
 

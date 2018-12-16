@@ -31,6 +31,7 @@
 //! This feature requires a nightly toolchain.
 
 #![cfg_attr(feature = "inline-asm", feature(asm))]
+#![cfg_attr(feature = "klee-analysis", feature(maybe_uninit))]
 // #![deny(missing_docs)]
 #![no_std]
 #![feature(untagged_unions)]
@@ -56,7 +57,7 @@ pub mod register;
 pub use peripheral::Peripherals;
 
 // Maybeununion
-pub union UntaggedOption<T> {
-    pub some: T,
-    pub none: (),
-}
+// pub union UntaggedOption<T> {
+//     pub some: T,
+//     pub none: (),
+// }
