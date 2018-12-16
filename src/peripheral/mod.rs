@@ -214,8 +214,14 @@ impl Peripherals {
 #[cfg(any(feature = "klee-analysis", feature = "klee-debug"))]
 mod klee_statics {
     use UntaggedOption; // should move to core::mem::MaybeUninit
+
+    // DWT
     pub static mut DWT: UntaggedOption<::peripheral::dwt::RegisterBlock> =
         UntaggedOption::<::peripheral::dwt::RegisterBlock> { none: () };
+
+    // SYST
+    pub static mut SYST: UntaggedOption<::peripheral::syst::RegisterBlock> =
+        UntaggedOption::<::peripheral::syst::RegisterBlock> { none: () };
 
 }
 /// Cache and branch predictor maintenance operations
@@ -476,8 +482,16 @@ unsafe impl Send for SYST {}
 
 impl SYST {
     /// Returns a pointer to the register block
+    #[cfg(not(any(feature = "klee-analysis", feature = "klee-debug")))]
     pub fn ptr() -> *const syst::RegisterBlock {
         0xE000_E010 as *const _
+    }
+
+    #[cfg(any(feature = "klee-analysis", feature = "klee-debug"))]
+    pub fn ptr() -> *const self::syst::RegisterBlock {
+        #[cfg(feature = "klee-analysis")]
+        ksymbol!(&mut klee_statics::SYST.some, "SYST");
+        unsafe { &klee_statics::SYST.some as *const _ }
     }
 }
 

@@ -1,4 +1,9 @@
 //! SysTick: System Timer
+#[cfg(feature = "klee-debug")]
+extern crate array_debug;
+
+#[cfg(feature = "klee-debug")]
+use core::fmt::{self, Debug, UpperHex};
 
 use volatile_register::{RO, RW};
 
@@ -6,6 +11,7 @@ use peripheral::SYST;
 
 /// Register block
 #[repr(C)]
+#[cfg_attr(feature = "klee-debug", derive(Debug))]
 pub struct RegisterBlock {
     /// Control and Status
     pub csr: RW<u32>,
@@ -153,12 +159,8 @@ impl SYST {
     /// Sets clock source
     pub fn set_clock_source(&mut self, clk_source: SystClkSource) {
         match clk_source {
-            SystClkSource::External => unsafe {
-                self.csr.modify(|v| v & !SYST_CSR_CLKSOURCE)
-            },
-            SystClkSource::Core => unsafe {
-                self.csr.modify(|v| v | SYST_CSR_CLKSOURCE)
-            },
+            SystClkSource::External => unsafe { self.csr.modify(|v| v & !SYST_CSR_CLKSOURCE) },
+            SystClkSource::Core => unsafe { self.csr.modify(|v| v | SYST_CSR_CLKSOURCE) },
         }
     }
 
