@@ -134,9 +134,7 @@ impl SCB {
         // NOTE(unsafe) atomic read operation with no side effects
         let cpacr = unsafe { (*Self::ptr()).cpacr.read() };
 
-        if cpacr & SCB_CPACR_FPU_MASK
-            == SCB_CPACR_FPU_ENABLE | SCB_CPACR_FPU_USER
-        {
+        if cpacr & SCB_CPACR_FPU_MASK == SCB_CPACR_FPU_ENABLE | SCB_CPACR_FPU_USER {
             FpuAccessMode::Enabled
         } else if cpacr & SCB_CPACR_FPU_MASK == SCB_CPACR_FPU_ENABLE {
             FpuAccessMode::Privileged
@@ -156,9 +154,7 @@ impl SCB {
         match mode {
             FpuAccessMode::Disabled => (),
             FpuAccessMode::Privileged => cpacr |= SCB_CPACR_FPU_ENABLE,
-            FpuAccessMode::Enabled => {
-                cpacr |= SCB_CPACR_FPU_ENABLE | SCB_CPACR_FPU_USER
-            }
+            FpuAccessMode::Enabled => cpacr |= SCB_CPACR_FPU_ENABLE | SCB_CPACR_FPU_USER,
         }
         unsafe { self.cpacr.write(cpacr) }
     }
@@ -167,8 +163,7 @@ impl SCB {
 impl SCB {
     /// Returns the active exception number
     pub fn vect_active() -> VectActive {
-        let icsr =
-            unsafe { ptr::read(&(*SCB::ptr()).icsr as *const _ as *const u32) };
+        let icsr = unsafe { ptr::read(&(*SCB::ptr()).icsr as *const _ as *const u32) };
 
         match icsr as u8 {
             0 => VectActive::ThreadMode,
@@ -358,9 +353,7 @@ impl SCB {
         ::asm::isb();
 
         // NOTE(unsafe) atomic read with no side effects
-        unsafe {
-            (*Self::ptr()).ccr.read() & SCB_CCR_IC_MASK == SCB_CCR_IC_MASK
-        }
+        unsafe { (*Self::ptr()).ccr.read() & SCB_CCR_IC_MASK == SCB_CCR_IC_MASK }
     }
 
     /// Invalidates I-Cache
@@ -416,9 +409,7 @@ impl SCB {
         ::asm::isb();
 
         // NOTE(unsafe) atomic read with no side effects
-        unsafe {
-            (*Self::ptr()).ccr.read() & SCB_CCR_DC_MASK == SCB_CCR_DC_MASK
-        }
+        unsafe { (*Self::ptr()).ccr.read() & SCB_CCR_DC_MASK == SCB_CCR_DC_MASK }
     }
 
     /// Invalidates D-cache
@@ -432,8 +423,7 @@ impl SCB {
         let mut cbp = unsafe { CBP::new() };
 
         // Read number of sets and ways
-        let (sets, ways) =
-            cpuid.cache_num_sets_ways(0, CsselrCacheType::DataOrUnified);
+        let (sets, ways) = cpuid.cache_num_sets_ways(0, CsselrCacheType::DataOrUnified);
 
         // Invalidate entire D-Cache
         for set in 0..sets {
@@ -453,8 +443,7 @@ impl SCB {
         let mut cbp = unsafe { CBP::new() };
 
         // Read number of sets and ways
-        let (sets, ways) =
-            cpuid.cache_num_sets_ways(0, CsselrCacheType::DataOrUnified);
+        let (sets, ways) = cpuid.cache_num_sets_ways(0, CsselrCacheType::DataOrUnified);
 
         for set in 0..sets {
             for way in 0..ways {
@@ -473,8 +462,7 @@ impl SCB {
         let mut cbp = unsafe { CBP::new() };
 
         // Read number of sets and ways
-        let (sets, ways) =
-            cpuid.cache_num_sets_ways(0, CsselrCacheType::DataOrUnified);
+        let (sets, ways) = cpuid.cache_num_sets_ways(0, CsselrCacheType::DataOrUnified);
 
         for set in 0..sets {
             for way in 0..ways {
@@ -563,11 +551,7 @@ impl SCB {
     /// by `addr`, in blocks of 32 bytes until at least `size` bytes have been cleaned and
     /// invalidated.
     #[inline]
-    pub fn clean_invalidate_dcache_by_address(
-        &mut self,
-        addr: usize,
-        size: usize,
-    ) {
+    pub fn clean_invalidate_dcache_by_address(&mut self, addr: usize, size: usize) {
         // No-op zero sized operations
         if size == 0 {
             return;
@@ -671,10 +655,7 @@ impl SCB {
 
     /// Check if PENDSVSET bit in the ICSR register is set meaning PendSV interrupt is pending
     pub fn is_pendsv_pending() -> bool {
-        unsafe {
-            (*Self::ptr()).icsr.read() & SCB_ICSR_PENDSVSET
-                == SCB_ICSR_PENDSVSET
-        }
+        unsafe { (*Self::ptr()).icsr.read() & SCB_ICSR_PENDSVSET == SCB_ICSR_PENDSVSET }
     }
 
     /// Set the PENDSVCLR bit in the ICSR register which will clear a pending PendSV interrupt
@@ -695,10 +676,7 @@ impl SCB {
     /// Check if PENDSTSET bit in the ICSR register is set meaning SysTick interrupt is pending
     #[inline]
     pub fn is_pendst_pending() -> bool {
-        unsafe {
-            (*Self::ptr()).icsr.read() & SCB_ICSR_PENDSTSET
-                == SCB_ICSR_PENDSTSET
-        }
+        unsafe { (*Self::ptr()).icsr.read() & SCB_ICSR_PENDSTSET == SCB_ICSR_PENDSTSET }
     }
 
     /// Set the PENDSTCLR bit in the ICSR register which will clear a pending SysTick interrupt
@@ -783,9 +761,7 @@ impl SCB {
         #[cfg(armv6m)]
         {
             // NOTE(unsafe) atomic read with no side effects
-            let shpr = unsafe {
-                (*Self::ptr()).shpr[usize::from((index - 8) / 4)].read()
-            };
+            let shpr = unsafe { (*Self::ptr()).shpr[usize::from((index - 8) / 4)].read() };
             let prio = (shpr >> (8 * (index % 4))) & 0x000000ff;
             prio as u8
         }
@@ -803,11 +779,7 @@ impl SCB {
     ///
     /// Changing priority levels can break priority-based critical sections (see
     /// [`register::basepri`](../register/basepri/index.html)) and compromise memory safety.
-    pub unsafe fn set_priority(
-        &mut self,
-        system_handler: SystemHandler,
-        prio: u8,
-    ) {
+    pub unsafe fn set_priority(&mut self, system_handler: SystemHandler, prio: u8) {
         let index = system_handler.index();
 
         #[cfg(not(armv6m))]

@@ -36,6 +36,7 @@
     any(feature = "klee-analysis", feature = "klee-debug"),
     feature(maybe_uninit)
 )]
+#![feature(stmt_expr_attributes)]
 // #![deny(missing_docs)]
 #![no_std]
 #![feature(untagged_unions)]

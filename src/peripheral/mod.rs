@@ -211,22 +211,45 @@ impl Peripherals {
     }
 }
 
-#[cfg(any(feature = "klee-analysis", feature = "klee-debug"))]
+/// Static memory allocation for KLEE analysis
+#[cfg(feature = "klee-analysis")]
 mod klee_statics {
     use core::mem::MaybeUninit;
-    //use UntaggedOption; // should move to core::mem::MaybeUninit
 
-    // DWT
-    // pub static mut DWT: UntaggedOption<::peripheral::dwt::RegisterBlock> =
-    //     UntaggedOption::<::peripheral::dwt::RegisterBlock> { none: () };
+    pub static mut CBP: MaybeUninit<::peripheral::cbp::RegisterBlock> =
+        MaybeUninit::uninitialized();
+
+    pub static mut CPUID: MaybeUninit<::peripheral::cpuid::RegisterBlock> =
+        MaybeUninit::uninitialized();
+
+    pub static mut DCB: MaybeUninit<::peripheral::dcb::RegisterBlock> =
+        MaybeUninit::uninitialized();
+
+    pub static mut FPB: MaybeUninit<::peripheral::fpb::RegisterBlock> =
+        MaybeUninit::uninitialized();
+
+    pub static mut FPU: MaybeUninit<::peripheral::fpu::RegisterBlock> =
+        MaybeUninit::uninitialized();
 
     pub static mut DWT: MaybeUninit<::peripheral::dwt::RegisterBlock> =
         MaybeUninit::uninitialized();
 
-    // SYST
-    // pub static mut SYST: UntaggedOption<::peripheral::syst::RegisterBlock> =
-    //     UntaggedOption::<::peripheral::syst::RegisterBlock> { none: () };
+    pub static mut ITM: MaybeUninit<::peripheral::itm::RegisterBlock> =
+        MaybeUninit::uninitialized();
+
+    pub static mut MPU: MaybeUninit<::peripheral::mpu::RegisterBlock> =
+        MaybeUninit::uninitialized();
+
+    pub static mut NVIC: MaybeUninit<::peripheral::nvic::RegisterBlock> =
+        MaybeUninit::uninitialized();
+
+    pub static mut SCB: MaybeUninit<::peripheral::scb::RegisterBlock> =
+        MaybeUninit::uninitialized();
+
     pub static mut SYST: MaybeUninit<::peripheral::syst::RegisterBlock> =
+        MaybeUninit::uninitialized();
+
+    pub static mut TPIU: MaybeUninit<::peripheral::tpiu::RegisterBlock> =
         MaybeUninit::uninitialized();
 
 }
@@ -312,17 +335,17 @@ pub struct DWT {
 unsafe impl Send for DWT {}
 
 impl DWT {
-    #[cfg(not(any(feature = "klee-analysis", feature = "klee-debug")))]
     /// Returns a pointer to the physical register block
-    pub fn ptr() -> *const dwt::RegisterBlock {
-        0xE000_1000 as *const _
-    }
-
-    #[cfg(any(feature = "klee-analysis", feature = "klee-debug"))]
+    #[cfg(feature = "klee-analysis")]
     pub fn ptr() -> *const self::dwt::RegisterBlock {
         #[cfg(feature = "klee-analysis")]
         ksymbol!(&mut *klee_statics::DWT.get_mut(), "DWT");
         unsafe { klee_statics::DWT.get_ref() as *const _ }
+    }
+
+    #[cfg(not(feature = "klee-analysis"))]
+    pub fn ptr() -> *const dwt::RegisterBlock {
+        0xE000_1000 as *const _
     }
 }
 
@@ -488,16 +511,15 @@ unsafe impl Send for SYST {}
 
 impl SYST {
     /// Returns a pointer to the register block
-    #[cfg(not(any(feature = "klee-analysis", feature = "klee-debug")))]
+    #[cfg(feature = "klee-analysis")]
     pub fn ptr() -> *const syst::RegisterBlock {
-        0xE000_E010 as *const _
-    }
-
-    #[cfg(any(feature = "klee-analysis", feature = "klee-debug"))]
-    pub fn ptr() -> *const self::syst::RegisterBlock {
-        #[cfg(feature = "klee-analysis")]
         ksymbol!(&mut *klee_statics::SYST.get_mut(), "SYST");
         unsafe { klee_statics::SYST.get_ref() as *const _ }
+    }
+
+    #[cfg(not(feature = "klee-analysis"))]
+    pub fn ptr() -> *const syst::RegisterBlock {
+        0xE000_E010 as *const _
     }
 }
 
