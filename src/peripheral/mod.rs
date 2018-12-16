@@ -269,6 +269,13 @@ impl CBP {
     }
 
     /// Returns a pointer to the register block
+    #[cfg(feature = "klee-analysis")]
+    pub fn ptr() -> *const self::cbp::RegisterBlock {
+        ksymbol!(&mut *klee_statics::CBP.get_mut(), "CBP");
+        unsafe { klee_statics::CBP.get_ref() as *const _ }
+    }
+
+    #[cfg(not(feature = "klee-analysis"))]
     pub fn ptr() -> *const self::cbp::RegisterBlock {
         0xE000_EF50 as *const _
     }
@@ -292,6 +299,13 @@ unsafe impl Send for CPUID {}
 
 impl CPUID {
     /// Returns a pointer to the physical register block
+    #[cfg(feature = "klee-analysis")]
+    pub fn ptr() -> *const self::cpuid::RegisterBlock {
+        ksymbol!(&mut *klee_statics::CPUID.get_mut(), "CPUID");
+        unsafe { klee_statics::CPUID.get_ref() as *const _ }
+    }
+
+    #[cfg(not(feature = "klee-analysis"))]
     pub fn ptr() -> *const self::cpuid::RegisterBlock {
         0xE000_ED00 as *const _
     }
@@ -314,6 +328,13 @@ unsafe impl Send for DCB {}
 
 impl DCB {
     /// Returns a pointer to the register block
+    #[cfg(feature = "klee-analysis")]
+    pub fn ptr() -> *const self::dcb::RegisterBlock {
+        ksymbol!(&mut *klee_statics::DCB.get_mut(), "DCB");
+        unsafe { klee_statics::DCB.get_ref() as *const _ }
+    }
+
+    #[cfg(not(feature = "klee-analysis"))]
     pub fn ptr() -> *const dcb::RegisterBlock {
         0xE000_EDF0 as *const _
     }
@@ -338,7 +359,6 @@ impl DWT {
     /// Returns a pointer to the physical register block
     #[cfg(feature = "klee-analysis")]
     pub fn ptr() -> *const self::dwt::RegisterBlock {
-        #[cfg(feature = "klee-analysis")]
         ksymbol!(&mut *klee_statics::DWT.get_mut(), "DWT");
         unsafe { klee_statics::DWT.get_ref() as *const _ }
     }
@@ -367,6 +387,13 @@ unsafe impl Send for FPB {}
 #[cfg(not(armv6m))]
 impl FPB {
     /// Returns a pointer to the register block
+    #[cfg(feature = "klee-analysis")]
+    pub fn ptr() -> *const self::fpb::RegisterBlock {
+        ksymbol!(&mut *klee_statics::FPB.get_mut(), "FPB");
+        unsafe { klee_statics::FPB.get_ref() as *const _ }
+    }
+
+    #[cfg(not(feature = "klee-analysis"))]
     pub fn ptr() -> *const fpb::RegisterBlock {
         0xE000_2000 as *const _
     }
@@ -391,6 +418,13 @@ unsafe impl Send for FPU {}
 #[cfg(any(has_fpu, target_arch = "x86_64"))]
 impl FPU {
     /// Returns a pointer to the register block
+    #[cfg(feature = "klee-analysis")]
+    pub fn ptr() -> *const self::fpu::RegisterBlock {
+        ksymbol!(&mut *klee_statics::FPU.get_mut(), "FPU");
+        unsafe { klee_statics::FPU.get_ref() as *const _ }
+    }
+
+    #[cfg(not(feature = "klee-analysis"))]
     pub fn ptr() -> *const fpu::RegisterBlock {
         0xE000_EF30 as *const _
     }
@@ -415,6 +449,13 @@ unsafe impl Send for ITM {}
 #[cfg(not(armv6m))]
 impl ITM {
     /// Returns a pointer to the register block
+    // #[cfg(feature = "klee-analysis")]
+    // pub fn ptr() -> *const self::itm::RegisterBlock {
+    //     ksymbol!(&mut *klee_statics::ITM.get_mut(), "ITM");
+    //     unsafe { klee_statics::ITM.get_ref() as *const _ }
+    // }
+
+    // #[cfg(not(feature = "klee-analysis"))]
     pub fn ptr() -> *mut itm::RegisterBlock {
         0xE000_0000 as *mut _
     }
@@ -445,6 +486,13 @@ unsafe impl Send for MPU {}
 
 impl MPU {
     /// Returns a pointer to the register block
+    #[cfg(feature = "klee-analysis")]
+    pub fn ptr() -> *const self::mpu::RegisterBlock {
+        ksymbol!(&mut *klee_statics::MPU.get_mut(), "MPU");
+        unsafe { klee_statics::MPU.get_ref() as *const _ }
+    }
+
+    #[cfg(not(feature = "klee-analysis"))]
     pub fn ptr() -> *const mpu::RegisterBlock {
         0xE000_ED90 as *const _
     }
@@ -467,6 +515,13 @@ unsafe impl Send for NVIC {}
 
 impl NVIC {
     /// Returns a pointer to the register block
+    #[cfg(feature = "klee-analysis")]
+    pub fn ptr() -> *const self::nvic::RegisterBlock {
+        ksymbol!(&mut *klee_statics::NVIC.get_mut(), "NVIC");
+        unsafe { klee_statics::NVIC.get_ref() as *const _ }
+    }
+
+    #[cfg(not(feature = "klee-analysis"))]
     pub fn ptr() -> *const nvic::RegisterBlock {
         0xE000_E100 as *const _
     }
@@ -489,6 +544,13 @@ unsafe impl Send for SCB {}
 
 impl SCB {
     /// Returns a pointer to the register block
+    #[cfg(feature = "klee-analysis")]
+    pub fn ptr() -> *const self::scb::RegisterBlock {
+        ksymbol!(&mut *klee_statics::SCB.get_mut(), "SCB");
+        unsafe { klee_statics::SCB.get_ref() as *const _ }
+    }
+
+    #[cfg(not(feature = "klee-analysis"))]
     pub fn ptr() -> *const scb::RegisterBlock {
         0xE000_ED04 as *const _
     }
@@ -541,6 +603,13 @@ unsafe impl Send for TPIU {}
 #[cfg(not(armv6m))]
 impl TPIU {
     /// Returns a pointer to the register block
+    #[cfg(feature = "klee-analysis")]
+    pub fn ptr() -> *const self::tpiu::RegisterBlock {
+        ksymbol!(&mut *klee_statics::TPIU.get_mut(), "TPIU");
+        unsafe { klee_statics::TPIU.get_ref() as *const _ }
+    }
+
+    #[cfg(not(feature = "klee-analysis"))]
     pub fn ptr() -> *const tpiu::RegisterBlock {
         0xE004_0000 as *const _
     }
