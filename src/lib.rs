@@ -60,9 +60,3 @@ pub mod peripheral;
 pub mod register;
 
 pub use peripheral::Peripherals;
-
-// Maybeununion
-// pub union UntaggedOption<T> {
-//     pub some: T,
-//     pub none: (),
-// }
