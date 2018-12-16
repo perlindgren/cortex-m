@@ -31,7 +31,11 @@
 //! This feature requires a nightly toolchain.
 
 #![cfg_attr(feature = "inline-asm", feature(asm))]
-#![cfg_attr(feature = "klee-analysis", feature(maybe_uninit))]
+//#![cfg_attr(feature = "klee-analysis", feature(maybe_uninit))]
+#![cfg_attr(
+    any(feature = "klee-analysis", feature = "klee-debug"),
+    feature(maybe_uninit)
+)]
 // #![deny(missing_docs)]
 #![no_std]
 #![feature(untagged_unions)]

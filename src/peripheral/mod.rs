@@ -321,7 +321,7 @@ impl DWT {
     #[cfg(any(feature = "klee-analysis", feature = "klee-debug"))]
     pub fn ptr() -> *const self::dwt::RegisterBlock {
         #[cfg(feature = "klee-analysis")]
-        ksymbol!(&mut klee_statics::DWT.get_ref(), "DWT");
+        ksymbol!(&mut *klee_statics::DWT.get_mut(), "DWT");
         unsafe { klee_statics::DWT.get_ref() as *const _ }
     }
 }
@@ -496,7 +496,7 @@ impl SYST {
     #[cfg(any(feature = "klee-analysis", feature = "klee-debug"))]
     pub fn ptr() -> *const self::syst::RegisterBlock {
         #[cfg(feature = "klee-analysis")]
-        ksymbol!(klee_statics::SYST.get_mut(), "SYST");
+        ksymbol!(&mut *klee_statics::SYST.get_mut(), "SYST");
         unsafe { klee_statics::SYST.get_ref() as *const _ }
     }
 }
