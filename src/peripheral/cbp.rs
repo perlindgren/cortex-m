@@ -8,6 +8,7 @@ use peripheral::CBP;
 
 /// Register block
 #[repr(C)]
+#[cfg_attr(feature = "klee-debug", derive(Debug))]
 pub struct RegisterBlock {
     /// I-cache invalidate all to PoU
     pub iciallu: WO<u32>,

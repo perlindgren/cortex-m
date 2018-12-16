@@ -14,6 +14,7 @@ use super::SCB;
 
 /// Register block
 #[repr(C)]
+#[cfg_attr(feature = "klee-debug", derive(Debug))]
 pub struct RegisterBlock {
     /// Interrupt Control and State
     pub icsr: RW<u32>,

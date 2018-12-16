@@ -1,4 +1,9 @@
 //! Nested Vector Interrupt Controller
+#[cfg(feature = "klee-debug")]
+extern crate array_debug;
+
+#[cfg(feature = "klee-debug")]
+use self::array_debug::ArrayDebug;
 
 #[cfg(not(armv6m))]
 use volatile_register::RO;
@@ -9,6 +14,7 @@ use peripheral::NVIC;
 
 /// Register block
 #[repr(C)]
+#[cfg_attr(feature = "klee-debug", derive(Debug))]
 pub struct RegisterBlock {
     /// Interrupt Set-Enable
     pub iser: [RW<u32>; 16],
@@ -36,6 +42,9 @@ pub struct RegisterBlock {
     #[cfg(armv6m)]
     _reserved4: [u32; 16],
 
+    #[cfg(feature = "klee-debug")]
+    _reserved5: ArrayDebug<[u32; 48], u32>,
+    #[cfg(not(feature = "klee-debug"))]
     _reserved5: [u32; 48],
 
     #[cfg(not(armv6m))]
@@ -50,6 +59,9 @@ pub struct RegisterBlock {
     /// On ARMv6-M, the registers must only be accessed along word boundaries,
     /// so convenient byte-sized representation wouldn't work on that
     /// architecture.
+    #[cfg(feature = "klee-debug")]
+    ipr: ArrayDebug<[RW<u8>; 496], RW<u8>>,
+    #[cfg(not(feature = "klee-debug"))]
     pub ipr: [RW<u8>; 496],
 
     #[cfg(armv6m)]

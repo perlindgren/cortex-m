@@ -1,6 +1,11 @@
 //! Instrumentation Trace Macrocell
 //!
 //! *NOTE* Available only on ARMv7-M (`thumbv7*m-none-eabi*`)
+#[cfg(feature = "klee-debug")]
+extern crate array_debug;
+
+#[cfg(feature = "klee-debug")]
+use self::array_debug::ArrayDebug;
 
 use core::cell::UnsafeCell;
 use core::ptr;
@@ -9,9 +14,16 @@ use volatile_register::{RO, RW, WO};
 
 /// Register block
 #[repr(C)]
+#[cfg_attr(feature = "klee-debug", derive(Debug))]
 pub struct RegisterBlock {
     /// Stimulus Port
+    #[cfg(feature = "klee-debug")]
+    pub stum: ArrayDebug<[Stim; 640], Stim>,
+    #[cfg(not(feature = "klee-debug"))]
     pub stim: [Stim; 256],
+    #[cfg(feature = "klee-debug")]
+    reserved0: ArrayDebug<[u32; 640], u32>,
+    #[cfg(not(feature = "klee-debug"))]
     reserved0: [u32; 640],
     /// Trace Enable
     pub ter: [RW<u32>; 8],
@@ -21,6 +33,9 @@ pub struct RegisterBlock {
     reserved2: [u32; 15],
     /// Trace Control
     pub tcr: RW<u32>,
+    #[cfg(feature = "klee-debug")]
+    reserved3: ArrayDebug<[u32; 75], u32>,
+    #[cfg(not(feature = "klee-debug"))]
     reserved3: [u32; 75],
     /// Lock Access
     pub lar: WO<u32>,
@@ -29,6 +44,7 @@ pub struct RegisterBlock {
 }
 
 /// Stimulus Port
+#[cfg_attr(feature = "klee-debug", derive(Debug))]
 pub struct Stim {
     register: UnsafeCell<u32>,
 }

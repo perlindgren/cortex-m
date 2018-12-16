@@ -9,6 +9,7 @@ use peripheral::CPUID;
 
 /// Register block
 #[repr(C)]
+#[cfg_attr(feature = "klee-debug", derive(Debug))]
 pub struct RegisterBlock {
     /// CPUID base
     pub base: RO<u32>,

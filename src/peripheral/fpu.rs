@@ -6,6 +6,7 @@ use volatile_register::{RO, RW};
 
 /// Register block
 #[repr(C)]
+#[cfg_attr(feature = "klee-debug", derive(Debug))]
 pub struct RegisterBlock {
     reserved: u32,
     /// Floating Point Context Control

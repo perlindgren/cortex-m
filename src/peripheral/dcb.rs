@@ -8,6 +8,7 @@ const DCB_DEMCR_TRCENA: u32 = 1 << 24;
 
 /// Register block
 #[repr(C)]
+#[cfg_attr(feature = "klee-debug", derive(Debug))]
 pub struct RegisterBlock {
     /// Debug Halting Control and Status
     pub dhcsr: RW<u32>,

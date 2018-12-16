@@ -4,6 +4,7 @@ use volatile_register::{RO, RW};
 
 /// Register block
 #[repr(C)]
+#[cfg_attr(feature = "klee-debug", derive(Debug))]
 pub struct RegisterBlock {
     /// Type
     pub _type: RO<u32>,
