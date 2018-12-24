@@ -2,11 +2,12 @@
 authors = [
     "The Cortex-M Team <cortex-m@teams.rust-embedded.org>",
     "Jorge Aparicio <jorge@japaric.io>",
-]
+    "Per Lindgren <per.lindgren@ltu.se>"]
+
 categories = ["embedded", "hardware-support", "no-std"]
 description = "Low level access to Cortex-M processors"
 documentation = "https://docs.rs/cortex-m"
-keywords = ["arm", "cortex-m", "register", "peripheral"]
+keywords = ["arm", "cortex-m", "register", "peripheral", "klee"]
 license = "MIT OR Apache-2.0"
 name = "cortex-m"
 readme = "README.md"
@@ -19,8 +20,13 @@ links = "cortex-m"  # prevent multiple versions of this crate to be linked toget
 aligned = "0.3.1"
 bare-metal = { version = "0.2.0", features = ["const-fn"] }
 volatile-register = "0.2.0"
+version = "0.6.0"
+
+[patch.crates-io]
+volatile-register = { git = "https://gitlab.henriktjader.com/pln/volatile-register.git", branch = "klee-analysis" }
 
 [features]
 const-fn = []
 cm7-r0p1 = []
 inline-asm = []
+klee-analysis = ["volatile-register/klee-analysis"]
