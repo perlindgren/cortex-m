@@ -1,21 +1,25 @@
 [package]
-authors = ["Jorge Aparicio <jorge@japaric.io>"]
+authors = ["Jorge Aparicio <jorge@japaric.io>, Per Lindgren <per.lindgren@ltu.se>"]
 categories = ["embedded", "hardware-support", "no-std"]
 description = "Low level access to Cortex-M processors"
 documentation = "https://docs.rs/cortex-m"
-keywords = ["arm", "cortex-m", "register", "peripheral"]
+keywords = ["arm", "cortex-m", "register", "peripheral", "klee"]
 license = "MIT OR Apache-2.0"
 name = "cortex-m"
 readme = "README.md"
 repository = "https://github.com/japaric/cortex-m"
-version = "0.5.8"
+version = "0.6.0"
+
+[patch.crates-io]
+volatile-register = { git = "https://gitlab.henriktjader.com/pln/volatile-register.git", branch = "klee-analysis" }
 
 [dependencies]
 aligned = "0.2.0"
 bare-metal = "0.2.0"
-volatile-register = "0.2.0"
+volatile-register = "0.3.0"
 
 [features]
 cm7-r0p1 = []
 const-fn = ["bare-metal/const-fn"]
 inline-asm = []
+klee-analysis = ["volatile-register/klee-analysis"]
