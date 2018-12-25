@@ -19,8 +19,11 @@ pub fn bkpt() {
             __bkpt();
         },
 
-        // TODO, klee-analysis
-        #[cfg(not(cortex_m))]
+        // no effect of breakpoint for `klee-analysis`
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {}
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }
@@ -56,7 +59,11 @@ pub fn delay(_n: u32) {
             __delay(_n / 4 + 1);
         },
 
-        #[cfg(not(cortex_m))]
+        // no effect of delay for `klee-analysis`
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {}
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }
@@ -77,7 +84,11 @@ pub fn nop() {
             __nop()
         },
 
-        #[cfg(not(cortex_m))]
+        // no effect of `nop` for `klee-analysis`
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {}
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }
@@ -98,7 +109,11 @@ pub fn wfe() {
             __wfe()
         },
 
-        #[cfg(not(cortex_m))]
+        // no effect of `wfe` for `klee-analysis`
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {}
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }
@@ -119,7 +134,11 @@ pub fn wfi() {
             __wfi()
         },
 
-        #[cfg(not(cortex_m))]
+        // no effect of `wfi` for `klee-analysis`
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {}
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }
@@ -140,7 +159,11 @@ pub fn sev() {
             __sev()
         },
 
-        #[cfg(not(cortex_m))]
+        // no effect of `sev` for `klee-analysis`
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {}
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }
@@ -165,7 +188,11 @@ pub fn isb() {
             // XXX do we need a explicit compiler barrier here?
         },
 
-        #[cfg(not(cortex_m))]
+        // no effect of `isb` for `klee-analysis`
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {}
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }
@@ -193,7 +220,11 @@ pub fn dsb() {
             // XXX do we need a explicit compiler barrier here?
         },
 
-        #[cfg(not(cortex_m))]
+        // no effect of `bsb` for `klee-analysis`
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {}
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }
@@ -219,7 +250,11 @@ pub fn dmb() {
             // XXX do we need a explicit compiler barrier here?
         },
 
-        #[cfg(not(cortex_m))]
+        // no effect of `dmb` for `klee-analysis`
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {}
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }
