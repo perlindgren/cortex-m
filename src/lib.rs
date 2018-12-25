@@ -54,6 +54,10 @@ extern crate aligned;
 extern crate bare_metal;
 extern crate volatile_register;
 
+#[cfg(feature = "klee-analysis")]
+#[macro_use]
+extern crate klee;
+
 #[macro_use]
 mod macros;
 

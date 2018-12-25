@@ -23,7 +23,10 @@ pub fn disable() {
             __cpsid();
         },
 
-        #[cfg(not(cortex_m))]
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => (),
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }
@@ -48,8 +51,10 @@ pub unsafe fn enable() {
             // XXX do we need a explicit compiler barrier here?
             __cpsie();
         }
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => (),
 
-        #[cfg(not(cortex_m))]
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }

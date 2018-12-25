@@ -22,6 +22,14 @@ pub fn read() -> u8 {
             __basepri_r()
         },
 
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {
+            let mut register: u8 = unsafe { core::mem::uninitialized() };
+            ksymbol!(&mut register, "BASEPRI");
+            register
+        }
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         #[cfg(not(cortex_m))]
         () => unimplemented!(),
     }
@@ -64,7 +72,10 @@ pub unsafe fn write(_basepri: u8) {
             }
         },
 
-        #[cfg(not(cortex_m))]
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => (),
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }
