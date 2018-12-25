@@ -77,7 +77,6 @@
 
 // TODO stand-alone registers: ICTR, ACTLR and STIR
 
-
 use core::marker::PhantomData;
 use core::ops;
 

@@ -19,6 +19,7 @@ pub fn bkpt() {
             __bkpt();
         },
 
+        // TODO, klee-analysis
         #[cfg(not(cortex_m))]
         () => unimplemented!(),
     }

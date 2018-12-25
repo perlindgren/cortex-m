@@ -13,7 +13,14 @@ pub fn read() -> u32 {
             r
         }
 
-        #[cfg(not(cortex_m))]
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {
+            let mut r: u32 = unsafe { core::mem::uninitialized() };
+            ksymbol!(&mut r, "LR");
+            r
+        }
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }

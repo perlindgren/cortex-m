@@ -24,9 +24,9 @@ pub fn read() -> u8 {
 
         #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
         () => {
-            let mut register: u8 = unsafe { core::mem::uninitialized() };
-            ksymbol!(&mut register, "BASEPRI");
-            register
+            let mut r: u8 = unsafe { core::mem::uninitialized() };
+            ksymbol!(&mut r, "BASEPRI");
+            r
         }
 
         #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
