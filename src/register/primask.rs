@@ -52,7 +52,18 @@ pub fn read() -> Primask {
             }
         }
 
-        #[cfg(not(cortex_m))]
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {
+            let mut register: u32 = unsafe { core::mem::uninitialized() };
+            ksymbol!(&mut register, "PRIMASK");
+            if register & (1 << 0) == (1 << 0) {
+                Primask::Inactive
+            } else {
+                Primask::Active
+            }
+        }
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }

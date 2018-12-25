@@ -17,6 +17,7 @@ volatile-register = { git = "https://gitlab.henriktjader.com/pln/volatile-regist
 aligned = "0.2.0"
 bare-metal = "0.2.0"
 volatile-register = "0.3.0"
+klee = {git ="https://gitlab.henriktjader.com/pln/cargo-klee"}
 
 [features]
 cm7-r0p1 = []
