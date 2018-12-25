@@ -28,6 +28,71 @@ pub fn bkpt() {
     }
 }
 
+/// Additional breapoint instructions
+//
+// this however does not currently compile
+// .. crate attributes... stdsimd, const_fn, rustc_attrs
+// #[cfg(all(cortex_m, feature = "inline-asm"))]
+// #[inline(always)]
+// #[rustc_args_required_const(0)]
+// pub unsafe fn bkpt_nr(nr: i32) {
+//     core::arch::arm::__breakpoint(nr);
+//}
+// Workaround solution
+
+#[inline(always)]
+pub fn bkpt_nr(nr: u8) {
+    match () {
+        #[cfg(all(cortex_m, feature = "inline-asm"))]
+        () => match nr {
+            0 => unsafe { asm!("bkpt #0" :::: "volatile") },
+            1 => unsafe { asm!("bkpt #1" :::: "volatile") },
+            2 => unsafe { asm!("bkpt #2" :::: "volatile") },
+            3 => unsafe { asm!("bkpt #3" :::: "volatile") },
+            4 => unsafe { asm!("bkpt #4" :::: "volatile") },
+            5 => unsafe { asm!("bkpt #5" :::: "volatile") },
+            6 => unsafe { asm!("bkpt #6" :::: "volatile") },
+            7 => unsafe { asm!("bkpt #7" :::: "volatile") },
+            8 => unsafe { asm!("bkpt #8" :::: "volatile") },
+            9 => unsafe { asm!("bkpt #9" :::: "volatile") },
+            10 => unsafe { asm!("bkpt #10" :::: "volatile") },
+            11 => unsafe { asm!("bkpt #11" :::: "volatile") },
+            12 => unsafe { asm!("bkpt #12" :::: "volatile") },
+            13 => unsafe { asm!("bkpt #13" :::: "volatile") },
+            14 => unsafe { asm!("bkpt #14" :::: "volatile") },
+            15 => unsafe { asm!("bkpt #15" :::: "volatile") },
+            16 => unsafe { asm!("bkpt #16" :::: "volatile") },
+            17 => unsafe { asm!("bkpt #17" :::: "volatile") },
+            18 => unsafe { asm!("bkpt #18" :::: "volatile") },
+            19 => unsafe { asm!("bkpt #19" :::: "volatile") },
+            20 => unsafe { asm!("bkpt #20" :::: "volatile") },
+            21 => unsafe { asm!("bkpt #21" :::: "volatile") },
+            22 => unsafe { asm!("bkpt #22" :::: "volatile") },
+            23 => unsafe { asm!("bkpt #23" :::: "volatile") },
+            24 => unsafe { asm!("bkpt #24" :::: "volatile") },
+            25 => unsafe { asm!("bkpt #25" :::: "volatile") },
+            26 => unsafe { asm!("bkpt #26" :::: "volatile") },
+            27 => unsafe { asm!("bkpt #27" :::: "volatile") },
+            28 => unsafe { asm!("bkpt #28" :::: "volatile") },
+            29 => unsafe { asm!("bkpt #29" :::: "volatile") },
+            30 => unsafe { asm!("bkpt #30" :::: "volatile") },
+            31 => unsafe { asm!("bkpt #31" :::: "volatile") },
+            32 => unsafe { asm!("bkpt #32" :::: "volatile") },
+            _ => unimplemented!(),
+        },
+
+        #[cfg(all(cortex_m, not(feature = "inline-asm")))]
+        () => unimplemented!(),
+
+        // no effect of breakpoint for `klee-analysis`
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {}
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
+        () => unimplemented!(),
+    }
+}
+
 /// Blocks the program for *at least* `n` instruction cycles
 ///
 /// This is implemented in assembly so its execution time is the same regardless of the optimization

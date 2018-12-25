@@ -30,7 +30,6 @@ pub fn read() -> u8 {
         }
 
         #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
-        #[cfg(not(cortex_m))]
         () => unimplemented!(),
     }
 }
