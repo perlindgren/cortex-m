@@ -2,6 +2,7 @@
 //!
 //! **NOTE** This module is only available on ARMv7-M and newer
 
+// TODO: Klee support (in particular busy wait)
 use core::{fmt, mem, ptr, slice};
 
 use aligned::{Aligned, A4};

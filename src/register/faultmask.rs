@@ -56,7 +56,18 @@ pub fn read() -> Faultmask {
             }
         }
 
-        #[cfg(not(cortex_m))]
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {
+            let mut r: u8 = unsafe { core::mem::uninitialized() };
+            ksymbol!(&mut r, "FAULTMASK");
+            if r & (1 << 0) == (1 << 0) {
+                Faultmask::Inactive
+            } else {
+                Faultmask::Active
+            }
+        }
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }

@@ -20,7 +20,14 @@ pub fn read() -> u32 {
             __msp_r()
         },
 
-        #[cfg(not(cortex_m))]
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {
+            let mut r: u32 = unsafe { core::mem::uninitialized() };
+            ksymbol!(&mut r, "MSP");
+            r
+        }
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }
@@ -41,7 +48,10 @@ pub unsafe fn write(_bits: u32) {
             __msp_w(_bits);
         }
 
-        #[cfg(not(cortex_m))]
+        #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+        () => {}
+
+        #[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
         () => unimplemented!(),
     }
 }

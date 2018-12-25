@@ -10,7 +10,8 @@ fn main() {
         fs::copy(
             format!("bin/{}.a", target),
             out_dir.join(format!("lib{}.a", name)),
-        ).unwrap();
+        )
+        .unwrap();
 
         println!("cargo:rustc-link-lib=static={}", name);
         println!("cargo:rustc-link-search={}", out_dir.display());
@@ -25,7 +26,7 @@ fn main() {
     } else if target.starts_with("thumbv7em-") {
         println!("cargo:rustc-cfg=cortex_m");
         println!("cargo:rustc-cfg=armv7m");
-        //println!("cargo:rustc-cfg=armv7em");
+    //println!("cargo:rustc-cfg=armv7em");
     } else if target.starts_with("thumbv8m.base") {
         println!("cargo:rustc-cfg=cortex_m");
         println!("cargo:rustc-cfg=armv8m");
