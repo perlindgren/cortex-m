@@ -28,7 +28,7 @@ pub fn bkpt() {
     }
 }
 
-/// Additional breapoint instructions
+/// Additional breakpoint instructions
 //
 // this however does not currently compile
 // .. crate attributes... stdsimd, const_fn, rustc_attrs
@@ -41,10 +41,10 @@ pub fn bkpt() {
 // Workaround solution
 
 #[inline(always)]
-pub fn bkpt_nr(nr: u8) {
+pub fn bkpt_nr(_nr: u8) {
     match () {
         #[cfg(all(cortex_m, feature = "inline-asm"))]
-        () => match nr {
+        () => match _nr {
             0 => unsafe { asm!("bkpt #0" :::: "volatile") },
             1 => unsafe { asm!("bkpt #1" :::: "volatile") },
             2 => unsafe { asm!("bkpt #2" :::: "volatile") },
