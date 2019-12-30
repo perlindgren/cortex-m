@@ -63,7 +63,7 @@ pub fn read() -> Apsr {
         #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
         () => {
             let mut r: u32 = unsafe { core::mem::uninitialized() };
-            ksymbol!(&mut r, "APSR");
+            klee_make_symbolic!(&mut r, "APSR");
             Apsr { bits: r }
         }
 

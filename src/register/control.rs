@@ -183,7 +183,7 @@ pub fn read() -> Control {
         #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
         () => {
             let mut r: u32 = unsafe { core::mem::uninitialized() };
-            ksymbol!(&mut r, "CONTROL");
+            klee_make_symbolic!(&mut r, "CONTROL");
             Control { bits: r }
         }
 
