@@ -23,7 +23,7 @@ pub fn read() -> u32 {
         #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
         () => {
             let mut r: u32 = unsafe { core::mem::uninitialized() };
-            ksymbol!(&mut r, "MSP");
+            klee_make_symbolic!(&mut r, "MSP");
             r
         }
 
