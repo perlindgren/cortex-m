@@ -40,7 +40,7 @@ extern crate volatile_register;
 
 #[cfg(feature = "klee-analysis")]
 #[macro_use]
-use klee_sys as _;
+extern crate klee_sys;
 
 #[macro_use]
 mod macros;
