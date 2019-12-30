@@ -10,17 +10,18 @@ readme = "README.md"
 repository = "https://github.com/japaric/cortex-m"
 version = "0.6.1"
 
-[patch.crates-io]
-volatile-register = { git = "https://gitlab.henriktjader.com/pln/volatile-register.git", branch = "klee-analysis" }
+# [patch.crates-io]
+# volatile-register = { git = "https://gitlab.henriktjader.com/pln/volatile-register.git", branch = "klee-analysis" }
 
 [dependencies]
 aligned = "0.2.0"
 bare-metal = "0.2.0"
-volatile-register = "0.3.0"
-klee = {git ="https://gitlab.henriktjader.com/pln/cargo-klee"}
+volatile-register = "0.2.0"
+klee-sys = { git ="https://gitlab.henriktjader.com/pln/klee-sys.git" }
 
 [features]
 cm7-r0p1 = []
 const-fn = ["bare-metal/const-fn"]
 inline-asm = []
-klee-analysis = ["volatile-register/klee-analysis"]
+# klee-analysis = ["volatile-register/klee-analysis"]
+klee-analysis = []
