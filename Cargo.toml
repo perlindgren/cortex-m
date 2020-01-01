@@ -16,6 +16,9 @@ version = "0.6.1"
 edition = "2018"
 links = "cortex-m"  # prevent multiple versions of this crate to be linked together
 
+[patch.crates-io]
+volatile-register = { git = "https://gitlab.henriktjader.com/pln/volatile-register.git", branch = "trustit" }
+
 [dependencies]
 aligned = "0.3.1"
 bare-metal = { version = "0.2.0", features = ["const-fn"] }
@@ -26,5 +29,5 @@ klee-sys = { git ="https://gitlab.henriktjader.com/pln/klee-sys.git" }
 const-fn = []
 cm7-r0p1 = []
 inline-asm = []
-# klee-analysis = ["volatile-register/klee-analysis"]
-klee-analysis = []
+klee-analysis = ["volatile-register/klee-analysis"]
+# klee-analysis = []

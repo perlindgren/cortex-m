@@ -24,7 +24,8 @@ pub fn read() -> u8 {
 
         #[cfg(all(not(cortex_m), feature = "klee-analysis"))]
         () => {
-            let mut r: u8 = unsafe { core::mem::uninitialized() };
+            let mut r: u8 = unsafe { core::mem::MaybeUninit::uninit().assume_init() };
+
             klee_make_symbolic!(&mut r, "BASEPRI");
             r
         }
