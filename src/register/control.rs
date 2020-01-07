@@ -213,8 +213,11 @@ pub unsafe fn write(_control: Control) {
                 __control_w(_control.bits());
             }
         },
+        // write surpressed during "klee-analysis"
+        #[cfg(all(not(cortex_m), feauture = "klee-analysis"))]
+        () => (),
 
-        #[cfg(not(cortex_m))]
+        #[cfg(all(not(cortex_m), not(feauture = "klee-analysis")))]
         () => unimplemented!(),
     }
 }
