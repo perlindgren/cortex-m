@@ -99,7 +99,7 @@ pub fn bkpt_nr(_nr: u8) {
 /// level.
 ///
 /// NOTE that the delay can take much longer if interrupts are serviced during its execution.
-#[inline]
+#[inline(always)]
 pub fn delay(_n: u32) {
     // NOTE(divide by 4) is easier to compute than `/ 3` is it's just a shift (`>> 2`).
     match () {
@@ -134,7 +134,7 @@ pub fn delay(_n: u32) {
 }
 
 /// A no-operation. Useful to prevent delay loops from being optimized away.
-#[inline]
+#[inline(always)]
 pub fn nop() {
     match () {
         #[cfg(all(cortex_m, feature = "inline-asm"))]
@@ -159,7 +159,7 @@ pub fn nop() {
 }
 
 /// Wait For Event
-#[inline]
+#[inline(always)]
 pub fn wfe() {
     match () {
         #[cfg(all(cortex_m, feature = "inline-asm"))]
@@ -184,7 +184,7 @@ pub fn wfe() {
 }
 
 /// Wait For Interrupt
-#[inline]
+#[inline(always)]
 pub fn wfi() {
     match () {
         #[cfg(all(cortex_m, feature = "inline-asm"))]
@@ -209,7 +209,7 @@ pub fn wfi() {
 }
 
 /// Send Event
-#[inline]
+#[inline(always)]
 pub fn sev() {
     match () {
         #[cfg(all(cortex_m, feature = "inline-asm"))]
@@ -237,7 +237,7 @@ pub fn sev() {
 ///
 /// Flushes the pipeline in the processor, so that all instructions following the `ISB` are fetched
 /// from cache or memory, after the instruction has been completed.
-#[inline]
+#[inline(always)]
 pub fn isb() {
     match () {
         #[cfg(all(cortex_m, feature = "inline-asm"))]
@@ -269,7 +269,7 @@ pub fn isb() {
 ///
 ///  * any explicit memory access made before this instruction is complete
 ///  * all cache and branch predictor maintenance operations before this instruction complete
-#[inline]
+#[inline(always)]
 pub fn dsb() {
     match () {
         #[cfg(all(cortex_m, feature = "inline-asm"))]
@@ -299,7 +299,7 @@ pub fn dsb() {
 /// Ensures that all explicit memory accesses that appear in program order before the `DMB`
 /// instruction are observed before any explicit memory accesses that appear in program order
 /// after the `DMB` instruction.
-#[inline]
+#[inline(always)]
 pub fn dmb() {
     match () {
         #[cfg(all(cortex_m, feature = "inline-asm"))]

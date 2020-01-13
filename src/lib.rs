@@ -29,12 +29,15 @@
 //! This crate is guaranteed to compile on stable Rust 1.31 and up. It *might*
 //! compile with older versions but that may change in any new patch release.
 
+// #![feature(stdsimd)]
+// #![feature(rustc_attrs)]
+// #![feature(const_fn)]
+
 #![cfg_attr(feature = "inline-asm", feature(asm))]
 #![deny(missing_docs)]
 #![no_std]
 #![allow(clippy::identity_op)]
 #![allow(clippy::missing_safety_doc)]
-
 // This makes clippy warn about public functions which are not #[inline].
 //
 // Almost all functions in this crate result in trivial or even no assembly.

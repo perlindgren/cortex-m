@@ -97,3 +97,17 @@ const CFAIL: () = ();
 /// ```
 #[allow(dead_code)]
 const CPASS: () = ();
+
+// unsafe { asm!("bkpt #0" :::: "volatile") },
+
+/// generic breakpoint
+#[macro_export]
+macro_rules! bkpt {
+    ($nr:expr) => {
+        unsafe { asm!(concat!("bkpt #", $nr)) };
+    };
+    () => {
+        unsafe { asm!("bkpt #0" :::: "volatile") };
+    };
+
+}
