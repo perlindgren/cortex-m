@@ -60,6 +60,7 @@ impl DCB {
     }
 
     #[cfg(feature = "klee-analysis")]
+    /// made symbolic for klee-analysis
     #[inline]
     pub fn is_debugger_attached() -> bool {
         let mut value: u8 = unsafe { core::mem::MaybeUninit::uninit().assume_init() };

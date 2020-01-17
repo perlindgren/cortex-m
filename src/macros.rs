@@ -101,6 +101,8 @@ const CPASS: () = ();
 // unsafe { asm!("bkpt #0" :::: "volatile") },
 
 /// generic breakpoint
+/// currently requires nightly compiler
+#[cfg(cortex_m)]
 #[macro_export]
 macro_rules! bkpt {
     ($nr:expr) => {
@@ -109,5 +111,28 @@ macro_rules! bkpt {
     () => {
         unsafe { asm!("bkpt #0" :::: "volatile") };
     };
+}
 
+/// suppressed in analysis mode
+#[cfg(all(not(cortex_m), feature = "klee-analysis"))]
+#[macro_export]
+macro_rules! bkpt {
+    ($nr:expr) => {
+        ()
+    };
+    () => {
+        ()
+    };
+}
+
+/// implemented only for cortex-m,
+#[cfg(all(not(cortex_m), not(feature = "klee-analysis")))]
+#[macro_export]
+macro_rules! bkpt {
+    ($nr:expr) => {
+        unimplemented!()
+    };
+    () => {
+        unimplemented!()
+    };
 }

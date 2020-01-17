@@ -1,18 +1,12 @@
 [package]
-authors = [
-    "The Cortex-M Team <cortex-m@teams.rust-embedded.org>",
-    "Jorge Aparicio <jorge@japaric.io>",
-    "Per Lindgren <per.lindgren@ltu.se>" 
-    ]
+# All alternations to original code.
+authors = [ "Per Lindgren <per.lindgren@ltu.se>" ]
 
 categories = ["embedded", "hardware-support", "no-std"]
-description = "Low level access to Cortex-M processors"
-documentation = "https://docs.rs/cortex-m"
-keywords = ["arm", "cortex-m", "register", "peripheral", "klee"]
-license = "MIT OR Apache-2.0"
+description = "Low level access to Cortex-M processors with support for symbolic exectution and replay"
+keywords = ["arm", "cortex-m", "register", "peripheral", "trust"]
 name = "cortex-m"
 readme = "README.md"
-repository = "https://github.com/japaric/cortex-m"
 version = "0.6.1"
 edition = "2018"
 links = "cortex-m"  # prevent multiple versions of this crate to be linked together
@@ -21,10 +15,11 @@ links = "cortex-m"  # prevent multiple versions of this crate to be linked toget
 aligned = "0.3.1"
 bare-metal = { version = "0.2.0", features = ["const-fn"] }
 volatile-register = "0.2.0"
-klee-sys = { git ="https://gitlab.henriktjader.com/pln/klee-sys.git" }
+klee-sys = { version = "0.1.0", git ="https://gitlab.henriktjader.com/pln/klee-sys.git" }
 
 [features]
 const-fn = []
 cm7-r0p1 = []
 inline-asm = []
-klee-analysis = []
+klee-analysis = ["klee-sys/klee-analysis"]
+klee-replay = ["klee-sys/klee-replay"]
