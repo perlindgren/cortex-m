@@ -12,10 +12,10 @@ edition = "2018"
 links = "cortex-m"  # prevent multiple versions of this crate to be linked together
 
 [dependencies]
-aligned = "0.3.1"
-bare-metal = { version = "0.2.0", features = ["const-fn"] }
+aligned = "0.3.4"
+bare-metal = { version = "1.0.0", features = ["const-fn"] }
 volatile-register = "0.2.0"
-klee-sys = { version = "0.1.0", git ="https://gitlab.henriktjader.com/pln/klee-sys.git" }
+klee-sys = { version = "0.2.0", git ="https://gitlab.henriktjader.com/pln/klee-sys.git" }
 
 [features]
 const-fn = []
